@@ -1,7 +1,9 @@
+import books.Book;
+
 import java.util.Scanner;
 
 public class Admin extends User{
-    // Tambahkan informasi username dan password admin
+    // Tambahkan informasi username dan password admina
     private static final String ADMIN_USERNAME = "admin";
     private static final String ADMIN_PASSWORD = "admin123";
     public void menuAdmin(Scanner scanner) {
@@ -82,9 +84,9 @@ public class Admin extends User{
     }
     public void addBook(Scanner scanner) {
         System.out.println("Choose book category:");
-        System.out.println("1. Story Book");
-        System.out.println("2. History Book");
-        System.out.println("3. Text Book");
+        System.out.println("1. Story books.Book");
+        System.out.println("2. History books.Book");
+        System.out.println("3. Text books.Book");
         System.out.println("4. Keluar");
         System.out.print("Enter choice (1-4): ");
         String categoryChoice = scanner.nextLine();
@@ -92,20 +94,20 @@ public class Admin extends User{
         String category;
         switch (categoryChoice) {
             case "1":
-                category = "Story Book";
+                category = "Story books.Book";
                 break;
             case "2":
-                category = "History Book";
+                category = "History books.Book";
                 break;
             case "3":
-                category = "Text Book";
+                category = "Text books.Book";
                 break;
             case "4":
                 System.out.println("System logout...");
                 return;
             default:
-                System.out.println("Invalid choice. Defaulting to Story Book.");
-                category = "Story Book";
+                System.out.println("Invalid choice. Defaulting to Story books.Book.");
+                category = "Story books.Book";
                 break;
         }
         System.out.println("Enter book details:");
@@ -119,7 +121,7 @@ public class Admin extends User{
         int stock = Integer.parseInt(scanner.nextLine());
 
         Main.bookList.add(new Book(id, title, author, category, stock));
-        System.out.println("Book successfully added to the library.");
+        System.out.println("books.Book successfully added to the library.");
     }
     public void displayBookList() {
         System.out.println("List of Books:");

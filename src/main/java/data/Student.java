@@ -1,3 +1,5 @@
+import books.Book;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -119,18 +121,18 @@ public class Student extends User{
             selectedBook.setStock(selectedBook.getStock() - 1);
             selectedBook.setLoanDuration(loanDuration); // Set loan duration for the book
             borrowBook(selectedBook);
-            System.out.println("Book '" + selectedBook.getTitle() + "' borrowed successfully for " + loanDuration + " days.");
+            System.out.println("books.Book '" + selectedBook.getTitle() + "' borrowed successfully for " + loanDuration + " days.");
         } else {
             System.out.println("Sorry, the selected book is out of stock.");
         }
     }
 
-    // Di kelas Book, tambahkan setter untuk loanDuration
+    // Di kelas books.Book, tambahkan setter untuk loanDuration
     public void setLoanDuration(int loanDuration) {
         this.loanDuration = loanDuration;
     }
 
-    // Di kelas Book, tambahkan getter untuk loanDuration
+    // Di kelas books.Book, tambahkan getter untuk loanDuration
     public int getLoanDuration() {
         return loanDuration;
     }

@@ -1,3 +1,9 @@
+package data;
+
+import books.Book;
+import data.Admin;
+import data.Student;
+
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -10,8 +16,8 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("===== Library System =====");
-            System.out.println("1. Login as Student");
-            System.out.println("2. Login as Admin");
+            System.out.println("1. Login as data.Student");
+            System.out.println("2. Login as data.Admin");
             System.out.println("3. Exit");
             System.out.print("Choose option (1-3): ");
             String option = scanner.nextLine();
