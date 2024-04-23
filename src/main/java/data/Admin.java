@@ -1,137 +1,146 @@
-import books.Book;
+package data;
 
 import java.util.Scanner;
+import java.util.UUID;
 
-public class Admin extends User{
-    // Tambahkan informasi username dan password admina
-    private static final String ADMIN_USERNAME = "admin";
-    private static final String ADMIN_PASSWORD = "admin123";
-    public void menuAdmin(Scanner scanner) {
-        if (loginAdmin(scanner)) {
-            while (true) {
-                System.out.println("=== Admin Menu ===");
-                System.out.println("1. Tambah Mahasiswa");
-                System.out.println("2. Lihat Daftar Mahasiswa");
-                System.out.println("3. Tambah Buku");
-                System.out.println("4. Lihat Daftar Buku");
-                System.out.println("5. Keluar");
-                System.out.print("Choose option (1-5): ");
-                String option = scanner.nextLine();
-                switch (option) {
-                    case "1":
-                        addStudent(scanner);
-                        break;
-                    case "2":
-                        displayStudent();
-                        break;
-                    case "3":
-                        addBook(scanner);
-                        break;
-                    case "4":
-                        displayBookList();
-                        break;
-                    case "5":
-                        System.out.println("Logging out from admin account.");
-                        return;
-                    default:
-                        System.out.println("Invalid option.");
-                }
-            }
-        }else {
-            System.out.println("Admin login failed. Exiting.");
-        }
-    }
-    // Metode untuk melakukan autentikasi admin
-    private boolean loginAdmin(Scanner scanner) {
-        System.out.print("Enter admin username: ");
-        String username = scanner.nextLine();
-        System.out.print("Enter admin password: ");
-        String password = scanner.nextLine();
+import books.*;
+import util.iMenu;
 
-        // Periksa apakah username dan password sesuai dengan yang diharapkan
-        return username.equals(ADMIN_USERNAME) && password.equals(ADMIN_PASSWORD);
+import com.main.LibrarySystem;
+
+public class Admin extends User implements iMenu {
+    Scanner Input = new Scanner(System.in);
+    Student[] userStudent = LibrarySystem.getUserStudent(); 
+    Book[] bookList = LibrarySystem.getBookList(); 
+    
+    LibrarySystem main = new LibrarySystem();
+
+    public Admin(String nama, String NIM, String fakultas, String prodi) {
+        super(nama, NIM, fakultas, prodi);
     }
 
-    public void addStudent(Scanner scanner) {
-        System.out.println("Enter student details:");
-        System.out.print("Enter student name: ");
-        String name = scanner.nextLine();
-        String nim;
-        do {
-            System.out.print("Enter student NIM: ");
-            nim = scanner.nextLine();
-            if (nim.length() != 15) {
-                System.out.println("NIM must be 15 digits.");
-            }
-        } while (nim.length() != 15);
-        System.out.print("Enter student faculty: ");
-        String faculty = scanner.nextLine();
-        System.out.print("Enter student program: ");
-        String program = scanner.nextLine();
-        Main.userStudent.add(new Student(name, nim, faculty, program));
-        System.out.println("Student successfully registered.");
-    }
+    public void addStudent() {
+      System.out.print("Nama     : ");
+      String nama = Input.next();
+      String NIM;
+      do {
+          System.out.print("NIM      : ");
+          NIM = Input.next();
+          if (NIM.length() != 15)
+              System.out.println("NIM harus 15 digit !!!");
+      } while (NIM.length() != 15);
+      System.out.print("Fakultas : ");
+      String fakultas = Input.next();
+      System.out.print("Prodi    : ");
+      String prodi = Input.next();
+
+      Student mahasiswa = new Student(nama, NIM, fakultas, prodi);
+      for (int i = 0; i < userStudent.length; i++) {
+          if (userStudent[i] == null) {
+              userStudent[i] = mahasiswa;
+              break;
+          }
+      }
+      System.out.println("Mahasiswa berhasil ditambahkan");
+  }
+  
 
     public void displayStudent() {
-        System.out.println("List of Registered Students:");
-        for (Student student : Main.userStudent) {
-            System.out.println("Nama: " + student.getName());
-            System.out.println("Fakultas: " + student.getFaculty());
-            System.out.println("NIM: " + student.getNim());
-            System.out.println("Prodi: " + student.getProgram());
-            System.out.println();
+        System.out.println("===== Daftar Mahasiswa =====");
+        if (userStudent[0] == null) {
+            System.out.println("Tidak ada mahasiswa yang terdaftar.");
+        } else {
+            for (Student student : userStudent) {
+                if (student != null) {
+                    System.out.println("Nama     : " + student.getNama());
+                    System.out.println("NIM      : " + student.getNIM());
+                    System.out.println("Fakultas : " + student.getFakultas());
+                    System.out.println("Prodi    : " + student.getProdi());
+                    System.out.println("---------------------------------");
+                }
+            }
+        }
+        System.out.println("99. Kembali ke Menu Admin");
+        System.out.print("Masukkan angka 99 untuk kembali: ");
+        int choice = Input.nextInt();
+        if (choice == 99) {
+            main.menuAdmin();
+        } else {
+            System.out.println("Pilihan tidak valid.");
+            displayStudent();
         }
     }
-    public void addBook(Scanner scanner) {
-        System.out.println("Choose book category:");
-        System.out.println("1. Story books.Book");
-        System.out.println("2. History books.Book");
-        System.out.println("3. Text books.Book");
-        System.out.println("4. Keluar");
-        System.out.print("Enter choice (1-4): ");
-        String categoryChoice = scanner.nextLine();
 
-        String category;
-        switch (categoryChoice) {
-            case "1":
-                category = "Story books.Book";
-                break;
-            case "2":
-                category = "History books.Book";
-                break;
-            case "3":
-                category = "Text books.Book";
-                break;
-            case "4":
-                System.out.println("System logout...");
-                return;
-            default:
-                System.out.println("Invalid choice. Defaulting to Story books.Book.");
-                category = "Story books.Book";
-                break;
-        }
-        System.out.println("Enter book details:");
-        System.out.print("Enter book ID: ");
-        String id = scanner.nextLine();
-        System.out.print("Enter book title: ");
-        String title = scanner.nextLine();
-        System.out.print("Enter book author: ");
-        String author = scanner.nextLine();
-        System.out.print("Enter book stock: ");
-        int stock = Integer.parseInt(scanner.nextLine());
+    public void inputBook() {
+      Book buku = null;
 
-        Main.bookList.add(new Book(id, title, author, category, stock));
-        System.out.println("books.Book successfully added to the library.");
+      System.out.println("===== Tambah Buku =====");
+      System.out.println("Pilih kategori buku:");
+      System.out.println("1. Story Book");
+      System.out.println("2. History Book");
+      System.out.println("3. Text Book");
+      System.out.print("Pilih kategori (1-3): ");
+      int pilihan = Input.nextInt();
+
+      Input.nextLine(); // Membersihkan buffer
+
+      System.out.print("Judul Buku: ");
+      String judul = Input.nextLine();
+      System.out.print("Penulis: ");
+      String author = Input.nextLine();
+      System.out.print("Stok Buku: ");
+      int stok = Input.nextInt();
+
+      switch (pilihan) {
+          case 1:
+              buku = new StoryBook(generateId(), judul, author, "Cerita", stok, 0);
+              break;
+          case 2:
+              buku = new HistoryBook(generateId(), judul, author, "Sejarah", stok, 0);
+              break;
+          case 3:
+              buku = new TextBook(generateId(), judul, author, "Novel", stok, 0);
+              break;
+          default:
+              System.out.println("Pilihan Tidak Valid!!\nPilih Nomor (1-3) !!!");
+              return;
+      }
+
+      for (int i = 0; i < bookList.length; i++) {
+          if (bookList[i] == null) {
+              bookList[i] = buku;
+              break;
+          }
+      }
+
+      System.out.println("Buku berhasil ditambahkan ke perpustakaan.");
+  }
+
+    public String generateId() {
+        return UUID.randomUUID().toString();
     }
-    public void displayBookList() {
-        System.out.println("List of Books:");
-        System.out.println("================================================================");
-        System.out.println("|| No. || Id Buku || Nama Buku || Author || Category || Stock ||");
-        int index = 1;
-        for (Book book : Main.bookList) {
-            System.out.println("|| " + index + "  || " + book.getId() + " || " + book.getTitle() + " || " + book.getAuthor() + " || " + book.getCategory() + "  || " + book.getStock() + " ||");
-            index++;
+
+    @Override
+    public void displayBooks() {
+        super.displayBooks();
+        System.out.println("99. Kembali ke Menu Admin");
+        System.out.print("Masukkan angka 99 untuk kembali: ");
+        int choice = Input.nextInt();
+        if (choice == 99) {
+            main.menuAdmin();
+        } else {
+            System.out.println("Pilihan tidak valid.");
+            displayBooks();
         }
-        System.out.println("================================================================");
+    }
+
+    @Override
+    public void menu() {
+        System.out.println("===== Dashboard Admin =====");
+        System.out.println("1. Tambah Mahasiswa");
+        System.out.println("2. Tambah Buku");
+        System.out.println("3. Tampilkan Daftar Mahasiswa");
+        System.out.println("4. Daftar Buku Tersedia");
+        System.out.println("5. Logout");
     }
 }

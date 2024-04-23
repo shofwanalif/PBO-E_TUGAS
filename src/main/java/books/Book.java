@@ -1,42 +1,72 @@
+package books;
+
 public class Book {
-    private String id;
-    private String title;
+
+    private String id_buku;
+    private String judul;
     private String author;
     private String category;
-    private int loanDuration;
-    private int stock;
+    private int stockBuku;
+    private int duration;
 
-    public Book(String id, String title, String author, String category, int stock) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.category = category;
-        this.stock = stock;
+    public Book(String id_buku,String judul,String author,String category,int stockBuku,int duration){
+        this.id_buku=id_buku;
+        this.judul=judul;
+        this.author=author;
+        this.category=category;
+        this.stockBuku=stockBuku;
+        this.duration=duration;
     }
 
-    // Getters
-    public String getId() {
-        return id;
+    public void setAuthor(String author) {
+      this.author = author;
     }
-    public String getTitle() {
-        return title;
+
+    public void setCategory(String category) {
+      this.category = category;
     }
+
+    public void setDuration(int duration) {
+      this.duration = duration;
+    }
+
+    public void setId_buku(String id_buku) {
+      this.id_buku = id_buku;
+    }
+
+    public void setJudul(String judul) {
+      this.judul = judul;
+    }
+
+    public void setStockBuku(int stockBuku) {
+      this.stockBuku = stockBuku;
+    }
+
     public String getAuthor() {
-        return author;
+      return author;
     }
+    
     public String getCategory() {
-        return category;
+      return category;
     }
-    public int getStock() {
-        return stock;
+
+    public int getDuration() {
+      return duration;
     }
-    public void setStock(int stock) {
-        this.stock = stock;
+
+    public String getId_buku() {
+      return id_buku;
     }
-    public int getLoanDuration() {
-        return loanDuration;
+
+    public String getJudul(){
+      return judul;
     }
-    public void setLoanDuration(int loanDuration) {
-        this.loanDuration = loanDuration;
+
+    public int getStockBuku() {
+      return stockBuku;
     }
+
+    
+
+  
 }
