@@ -1,181 +1,199 @@
 package data;
 
-import java.util.*;
-
-import books.*;
+import books.Book;
+import exception.custom.illegalAdminAccess;
 import util.iMenu;
 
-import com.main.LibrarySystem;
+import java.util.ArrayList;
+import java.util.Scanner;
 
+import static com.main.LibrarySystem.bookList;
 
 public class Student extends User implements iMenu {
 
+    Scanner scanner = new Scanner(System.in);
+    private String name;
+    private String faculty;
+    private String studyProgram;
+    private ArrayList<Book> minjembuku = new ArrayList<>();
 
-    Scanner Input = new Scanner(System.in);
-    Book[] borrowedBooks = new Book[100];
-    LibrarySystem main = new LibrarySystem();
-
-    public Student(String nama, String NIM, String fakultas, String prodi) {
-        super(nama, NIM, fakultas, prodi);
+    public Student(String nim) {
+        super(nim);
     }
 
-    public void displayInfo() {
-        System.out.println("===== Data Diri Mahasiswa =====");
-        System.out.println("Nama: " + getNama());
-        System.out.println("NIM: " + getNIM());
-        System.out.println("Fakultas: " + getFakultas());
-        System.out.println("Prodi: " + getProdi());
+    public Student(String nim, String name, String faculty, String studyProgram) {
+        super(nim);
+        this.name = name;
+        this.faculty = faculty;
+        this.studyProgram = studyProgram;
     }
 
-    public void showBorrowedBooks() {
-        boolean anyBooksBorrowed = false;
-    
-        System.out.println("===== Daftar Buku Dipinjam =====");
-        for (int i = 0; i < borrowedBooks.length; i++) {
-            Book book = borrowedBooks[i];
-            if (book != null) {
-                anyBooksBorrowed = true;
-                System.out.println("ID Buku    : " + book.getId_buku());
-                System.out.println("Judul Buku : " + book.getJudul());
-                System.out.println("Author     : " + book.getAuthor());
-                System.out.println("Category   : " + book.getCategory());
-                System.out.println("Durasi     : " + book.getDuration() + " hari");
-                System.out.println("---------------------------------");
-            }
-        }
-    
-        if (!anyBooksBorrowed) {
-            System.out.println("Tidak ada buku yang dipinjam.");
-        }
-    }    
-
-    public void logOut() {
-        boolean hasBorrowedBooks = false;
-        for (int i = 0; i < borrowedBooks.length; i++) {
-            if (borrowedBooks[i] != null) {
-                hasBorrowedBooks = true;
-                break;
-            }
-        }
-    
-        if (!hasBorrowedBooks) {
-            System.out.println("Anda telah berhasil logout.");
+    public void login() {
+        if (checkNim(getNim())) {
+            System.out.println("Login berhasil sebagai Mahasiswa");
+            menu();
         } else {
-            System.out.println("Apakah kamu yakin untuk meminjam semua buku tersebut?");
-            System.out.println("Input Y (iya) atau T (tidak):");
-    
-            String choice = Input.nextLine();
-            if (choice.equalsIgnoreCase("Y")) {
-                System.out.println("Peminjaman buku berhasil dilakukan.");
-            } else {
-                System.out.println("Logout dibatalkan.");
-                main.menuStudent(); 
-            }
+            System.out.println("NIM Mahasiswa tidak valid atau tidak ditemukan");
         }
     }
-    
-    
 
-
-    public void choiceBook() {
-        Book[] bookList = LibrarySystem.getBookList();
-        displayBooks();
-        System.out.println("99. Kembali ke Menu");
-        System.out.print("Pilih buku yang ingin dipinjam (input ID buku atau 99 untuk kembali): ");
-        String bookId = Input.next();
-        if (bookId.equals("99")) {
-            return;
-        }
-
-        Book bookToBorrow = null;
-        for (Book buku : bookList) {
-            if (buku.getId_buku().equals(bookId)) {
-                bookToBorrow = buku;
-                break;
-            }
-        }
-
-        if (bookToBorrow == null) {
-            System.out.println("Buku tidak ditemukan.");
-        } else if (bookToBorrow.getStockBuku() <= 0) {
-            System.out.println("Stok buku habis!");
-        } else {
-            System.out.print("Masukkan durasi peminjaman (maksimal 14 hari): ");
-            int duration = Input.nextInt();
-            Input.nextLine();
-            if (duration > 14) {
-                System.out.println("Anda hanya dapat meminjam buku maksimal selama 14 hari.");
-            } else {
-                bookToBorrow.setStockBuku(bookToBorrow.getStockBuku() - 1);
-                bookToBorrow.setDuration(duration);
-                for (int i = 0; i < borrowedBooks.length; i++) {
-                    if (borrowedBooks[i] == null) {
-                        borrowedBooks[i] = bookToBorrow;
-                        System.out.println("Peminjaman buku berhasil dilakukan."); 
-                        break;
-                    }
-                }
-            }
-        }
+    private boolean checkNim(String nim) {
+        return nim.length() == 15;
     }
-    
-    public void returnBooks() {
-        boolean anyBooksBorrowed = false;
-  
-        for (int i = 0; i < borrowedBooks.length; i++) {
-            if (borrowedBooks[i] != null) {
-                anyBooksBorrowed = true;
-                break;
-            }
-        }
-    
-        if (!anyBooksBorrowed) {
-            System.out.println("Anda belum meminjam buku apapun.");
-            return;
-        }
-    
-        System.out.println("===== Buku yang Dipinjam =====");
-        for (int i = 0; i < borrowedBooks.length; i++) {
-            Book book = borrowedBooks[i];
-            if (book != null) {
-                System.out.println("ID Buku    : " + book.getId_buku());
-                System.out.println("Judul Buku : " + book.getJudul());
-                System.out.println("Author     : " + book.getAuthor());
-                System.out.println("Category   : " + book.getCategory());
-                System.out.println("Durasi     : " + book.getDuration() + " hari");
-                System.out.println("---------------------------------");
-            }
-        }
-        System.out.print("Apakah kamu yakin untuk mengembalikan semua buku tersebut? (Y/T): ");
-        String choice = Input.next();
-        if (choice.equalsIgnoreCase("Y")) {
-            for (int i = 0; i < borrowedBooks.length; i++) {
-                Book book = borrowedBooks[i];
-                if (book != null) {
-                    book.setStockBuku(book.getStockBuku() + 1);
-                    borrowedBooks[i] = null;
-                }
-            }
-            System.out.println("Pengembalian buku berhasil dilakukan.");
-        } else {
-            System.out.println("Pengembalian buku dibatalkan.");
-        }
-    }
-    
 
-    @Override
     public void menu() {
-        System.out.println("==== Student Menu ====");
-        System.out.println("1. Tampilkan Buku yang Dipinjam");
-        System.out.println("2. Pinjam Buku");
-        System.out.println("3. Kembalikan Buku");
-        System.out.println("4. Pinjam Buku atau Keluar");
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            try {
+            System.out.println("Menu Mahasiswa");
+            System.out.println("1. Buku Terpinjam");
+            System.out.println("2. Pinjam Buku");
+            System.out.println("3. Kembalikan Buku");
+            System.out.println("4. Pinjam Buku atau Logout");
+            System.out.print("Pilih antara (1-4): ");
+                if (!scanner.hasNextInt()) {
+                    scanner.next();
+                    throw new illegalAdminAccess("Invalid credentials");
+                }
+            int pilih = scanner.nextInt();
+
+            switch (pilih) {
+                case 1:
+                    System.out.println("Buku terpinjam: ");
+                    displayBorrowedBooks();
+                    break;
+                case 2:
+                    choiceBook(new ArrayList<>(bookList));
+                    break;
+                case 3:
+                    returnBook();
+                    break;
+                case 4:
+                    logout();
+                    return;
+                default:
+                    throw new illegalAdminAccess("Invalid credentials");
+            }
+            } catch (illegalAdminAccess e) {
+                System.out.println("Terjadi kesalahan: " + e.getMessage());
+            }
+        }
+    }
+    public void displayBorrowedBooks() {
+        if (minjembuku.isEmpty()) {
+            System.out.println("Tidak ada buku yang terpinjam.");
+        } else {
+            System.out.println("=================================================================================");
+            System.out.println("|| No. || Id Buku       || Nama Buku    || Author      || Category   || Durasi ||");
+            System.out.println("=================================================================================");
+            int index = 1;
+            for (Book book : minjembuku) {
+                System.out.println("|| " + index + " || " + book.getIdBuku() + " || " + book.getJudul() + " || " + book.getAuthor() + " || " + book.getCategory() + "  || " + book.getDuration() + " ||");
+                index++;
+            }
+            System.out.println("=================================================================================");
+        }
+    }
+    @Override
+    public void choiceBook(ArrayList<Book> bookList) {
+        System.out.println("Daftar Buku Tersedia:");
+        System.out.println("================================================================");
+        System.out.println("|| No. || Id Buku || Nama Buku || Author || Category || Stock ||");
+        int index = 1;
+        for (Book book : bookList) {
+            if (book != null) {
+                System.out.println("|| " + index + " || " + book.getIdBuku() + " || " + book.getJudul() + " || " + book.getAuthor() + " || " + book.getCategory() + "  || " + book.getStok() + " ||");
+                index++;
+            }
+        }
+
+        System.out.println("================================================================");
+        System.out.print("Masukkan ID Buku yang ingin dipinjam: ");
+        String bookId = scanner.next();
+        Book selectedBook = findBookById(bookId);
+        scanner.nextLine();
+        int durasi;
+        if (selectedBook != null) {
+            System.out.print("Masukkan durasi pinjaman: ");
+            durasi = Integer.parseInt(scanner.nextLine());
+            selectedBook.setDuration(durasi);
+
+            if (selectedBook.getStok() > 0) {
+                selectedBook.setStok(selectedBook.getStok() - 1);
+                minjembuku.add(selectedBook);
+            } else {
+                System.out.println("Buku tidak tersedia.");
+            }
+        } else {
+            System.out.println("Buku tidak ditemukan.");
+        }
     }
 
+
+    private void returnBook() {
+        if (minjembuku.isEmpty()) {
+            System.out.println("Anda belum meminjam buku.");
+            return;
+        }
+        System.out.println("Buku yang Anda pinjam:");
+        for (int i = 0; i < minjembuku.size(); i++) {
+            System.out.println((i + 1) + ". " + minjembuku.get(i).getJudul());
+        }
+        System.out.print("Pilih buku yang akan dikembalikan (nomor): ");
+        int choice = scanner.nextInt();
+        if (choice > 0 && choice <= minjembuku.size()) {
+            Book returnedBook = minjembuku.remove(choice - 1);
+            returnedBook.setStok(returnedBook.getStok() + 1);
+            System.out.println("Buku " + returnedBook.getJudul() + " berhasil dikembalikan.");
+        } else {
+            System.out.println("Pilihan tidak valid.");
+        }
+    }
+
+    private Book findBookById(String id) {
+        for (Book book : bookList) {
+            if (book != null && book.getIdBuku().equals(id)) {
+                return book;
+            }
+        }
+        return null;
+    }
+
+    private void logout() {
+        Scanner inp = new Scanner(System.in);
+
+        if (minjembuku.isEmpty()) {
+            System.out.println("Logout berhasil.");
+        } else {
+            displayBorrowedBooks();
+            System.out.println("Apakah anda yakin untuk meminjam semua buku tersebut? ");
+            System.out.print("Input Y (iya) atau T (tidak): ");
+            char pilih = inp.next().charAt(0);
+
+            if (pilih == 'y' || pilih == 'Y'){
+                System.out.println("Peminjaman buku berhasil di lakukan");
+                System.out.println("Logout berhasil.");
+            } else if (pilih == 't' || pilih == 'T'){
+                System.out.println("Buku telah dikembalikan");
+                System.out.println("Logout berhasil.");
+            }
+        }
+
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getFaculty() {
+        return faculty;
+    }
+
+    public String getStudyProgram() {
+        return studyProgram;
+    }
+
+    public ArrayList<Book> getBorrowedBooks() {
+        return minjembuku;
+    }
 }
-
-
-
-
-
-

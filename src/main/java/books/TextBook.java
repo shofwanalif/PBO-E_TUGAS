@@ -1,9 +1,7 @@
 package books;
 
-public class  TextBook extends Book {
-
-    public TextBook(String id_buku, String judul, String author, String category, int stockBuku, int duration){
-      super(id_buku, judul, author, "Novel", stockBuku,duration);
+public class TextBook extends Book{
+    public TextBook(String idBuku, String judul, int stok, String category, String author) {
+        super(idBuku, judul, stok, category, author);
     }
-
 }

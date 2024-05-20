@@ -1,72 +1,61 @@
 package books;
 
 public class Book {
-
-    private String id_buku;
+    private String idBuku;
     private String judul;
+    private int stok;
     private String author;
     private String category;
-    private int stockBuku;
+
     private int duration;
 
-    public Book(String id_buku,String judul,String author,String category,int stockBuku,int duration){
-        this.id_buku=id_buku;
-        this.judul=judul;
-        this.author=author;
-        this.category=category;
-        this.stockBuku=stockBuku;
-        this.duration=duration;
-    }
-
-    public void setAuthor(String author) {
-      this.author = author;
-    }
-
-    public void setCategory(String category) {
-      this.category = category;
+    public int getDuration() {
+        return duration;
     }
 
     public void setDuration(int duration) {
-      this.duration = duration;
+        this.duration = duration;
     }
 
-    public void setId_buku(String id_buku) {
-      this.id_buku = id_buku;
+    public Book(String idBuku, String judul, int stok, String category , String author) {
+        this.idBuku = idBuku;
+        this.judul = judul;
+        this.stok = stok;
+        this.category = category;
+        this.author = author;
     }
 
-    public void setJudul(String judul) {
-      this.judul = judul;
+    public Book(String idBuku, String judul, int stok, String category , String author, int duration) {
+        this.idBuku = idBuku;
+        this.judul = judul;
+        this.stok = stok;
+        this.category = category;
+        this.author = author;
+        this.duration = duration;
     }
 
-    public void setStockBuku(int stockBuku) {
-      this.stockBuku = stockBuku;
+    public String getIdBuku() {
+        return idBuku;
+    }
+
+    public String getJudul() {
+        return judul;
+    }
+
+    public int getStok() {
+        return stok;
+    }
+
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setStok(int stok) {
+        this.stok = stok;
     }
 
     public String getAuthor() {
-      return author;
+        return author;
     }
-    
-    public String getCategory() {
-      return category;
-    }
-
-    public int getDuration() {
-      return duration;
-    }
-
-    public String getId_buku() {
-      return id_buku;
-    }
-
-    public String getJudul(){
-      return judul;
-    }
-
-    public int getStockBuku() {
-      return stockBuku;
-    }
-
-    
-
-  
 }

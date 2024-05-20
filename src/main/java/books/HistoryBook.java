@@ -1,9 +1,7 @@
 package books;
 
 public class HistoryBook extends Book{
-
-  public HistoryBook(String id_buku,String judul,String author,String category,int stockBuku,int duration){
-    super(id_buku, judul, author, "Sejarah", stockBuku,duration);
-  }
-  
+    public HistoryBook(String idBuku, String judul, int stok, String category, String author) {
+        super(idBuku, judul, stok, category, author);
+    }
 }
